@@ -10,19 +10,14 @@ def df_cleaner(df):
     """
     Clean up a few variables in the training/test sets.
     """
-    # 欠損値の補完（with 平均）
-    # Clean up ages. 年齢不詳には年齢の平均値を代入
+    # Clean up ages. 
     median_age = np.median(df[(df['Age'].notnull())]['Age'])
-    var_age  = 10#np.var(df[(df['Age'].notnull())]['Age'])
 
     for passenger in df[(df['Age'].isnull())].index: #.index = 配列内のnullの場所
-    	# Ageがnullでない年齢集合の平均
-    	# df.loc[passenger, 'Age'] = np.average(df[(df['Age'].notnull())]['Age'])
     	df.loc[passenger, 'Age'] = median_age
 
     # Clean up fares.
     median_fare = np.median(df[(df['Fare'].notnull())]['Fare'])
-    var_fare  = np.var(df[(df['Fare'].notnull())]['Fare'])
     for passenger in df[(df['Fare'].isnull())].index:
         df.loc[passenger, 'Fare'] = median_fare
 
@@ -79,15 +74,11 @@ def main():
     sum_p = 0.0
     total = 0.0
     for (row, predict) in zip(y1_train['Survived'],pre):
-    	print row, predict
     	if row == predict:
 	    	sum_p += 1.0
     	total += 1.0
-    print sum_p,total
     print sum_p/total
     output = model.predict(x_test)
-    print x1_train
-    print x_test
 
 
     f = open("random_forest.csv", "wb")
